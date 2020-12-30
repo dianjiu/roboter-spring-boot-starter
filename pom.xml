@@ -64,137 +64,151 @@
     </dependencies>
 
 
+    <!-- 开源许可协议 -->
     <licenses>
-        <!-- Apache license -->
         <license>
             <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
+
+    <!--开发者信息 -->
     <developers>
         <developer>
             <name>Dianjiu</name>
             <email>dianjiu@dianjiu.cc</email>
-            <organization>DianjiuORG</organization>
-            <organizationUrl>https://dianjiu.org.cn/roboter-spring-boot-starter</organizationUrl>
-            <url>https://github.com/dianjiu/roboter-spring-boot-starter</url>
         </developer>
     </developers>
 
 
-    <!-- SCM info -->
+    <!-- 源码控制信息-->
     <scm>
-        <connection>scm:git:git://github.com/AnswerAIL/dingtalk-spring-boot-starter.git</connection>
-        <developerConnection>scm:git:ssh://github.com/AnswerAIL/dingtalk-spring-boot-starter.git</developerConnection>
-        <url>https://github.com/AnswerAIL/dingtalk-spring-boot-starter/tree/master</url>
+        <connection>scm:git:git://github.com/dianjiu/roboter-spring-boot-starter.git</connection>
+        <developerConnection>scm:git:ssh://github.com/dianjiu/roboter-spring-boot-starter.git</developerConnection>
+        <url>https://github.com/dianjiu/roboter-spring-boot-starter/tree/master</url>
     </scm>
 
 
+    <!--定义snapshots库和releases库的nexus地址-->
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
+            <!--sonatype-center需要对应到settings.xml下的server的id-->
+            <id>sonatype-center</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>ossrh</id>
+            <id>sonatype-center</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/webapp</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
     <profiles>
         <profile>
-            <id>release</id>
+            <!-- 本地开发环境-->
+            <id>dev</id>
+            <properties>
+                <profiles.active>dev</profiles.active>
+            </properties>
             <activation>
+                <!-- 设置默认激活这个配置-->
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
+        <profile>
+            <!--打包环境-->
+            <id>release</id>
+            <properties>
+                <profiles.active>release</profiles.active>
+            </properties>
+            <build>
+                <plugins>
+                    <!--生产源码文件插件-->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!--生产javadoc插件-->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <encoding>UTF-8</encoding>
+                                    <charset>UTF-8</charset>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!--gpg加密插件-->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
     </profiles>
 
-    <build>
-        <plugins>
-            <!--javadoc-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <aggregate>true</aggregate>
-                    <charset>UTF-8</charset>
-                    <docencoding>UTF-8</docencoding>
-                    <failOnError>false</failOnError>
-                    <defaultAuthor>Jaemon</defaultAuthor>
-                    <defaultSince>release</defaultSince>
-                    <defaultVersion>1.0.0</defaultVersion>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!--java resource-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <!-- http://maven.apache.org/plugins/maven-shade-plugin/shade-mojo.html -->
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.github.jaemon.dinger.utils.ConfigTools</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- do sign -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-
-    </build>
 
 </project>
