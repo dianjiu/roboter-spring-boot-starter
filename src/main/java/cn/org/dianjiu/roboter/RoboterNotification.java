@@ -16,6 +16,10 @@
 package cn.org.dianjiu.roboter;
 
 
+import cn.org.dianjiu.roboter.common.RoboterRequest;
+import cn.org.dianjiu.roboter.common.RoboterResponse;
+import cn.org.dianjiu.roboter.common.enums.MessageType;
+import cn.org.dianjiu.roboter.common.enums.RoboterType;
 
 /**
  * Roboter notification
@@ -26,34 +30,6 @@ package cn.org.dianjiu.roboter;
 public interface RoboterNotification {
 
 
-    /**
-     * 发送预警消息到钉钉
-     *
-     * <pre>
-     *     使用配置的默认钉钉机器人, {@link DingerProperties#getDefaultDinger()}
-     * </pre>
-     *
-     * @param messageSubType
-     *              消息类型{@link MessageSubType}
-     * @param request
-     *              请求体 {@link DingerRequest}
-     * @return
-     *              响应报文
-     * */
-    /*DingerResponse send(MessageSubType messageSubType, DingerRequest request);*/
-
-    /**
-     * 发送预警消息到钉钉
-     *
-     * @param dingerType
-     *              Dinger类型 {@link DingerType}
-     * @param messageSubType
-     *              消息类型{@link MessageSubType}
-     * @param request
-     *              请求体 {@link DingerRequest}
-     * @return
-     *              响应报文
-     * */
-    /*DingerResponse send(DingerType dingerType, MessageSubType messageSubType, DingerRequest request);*/
+    RoboterResponse send(RoboterType roboterType, MessageType messageType, RoboterRequest roboterRequest);
 
 }
