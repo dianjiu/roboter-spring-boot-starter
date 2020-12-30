@@ -10,7 +10,7 @@
     <version>1.0.0</version>
 
     <name>roboter-spring-boot-starter</name>
-    <description>Roboter-SpringBoot集成钉钉/企业微信群机器人实现消息通知中间件</description>
+    <description>Roboter-SpringBoot集成机器人实现消息通知中间件</description>
     <url>https://github.com/dianjiu/roboter-spring-boot-starter</url>
 
 
