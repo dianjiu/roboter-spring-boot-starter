@@ -1,7 +1,6 @@
 package cn.org.dianjiu.roboter.common;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RoboterRequest implements Serializable {
@@ -18,7 +17,7 @@ public class RoboterRequest implements Serializable {
     /**
      * 艾特成员信息
      */
-    private List<String> users = new ArrayList<>();
+    private List<String> users;
     /**
      * 艾特成员
      */
@@ -33,7 +32,7 @@ public class RoboterRequest implements Serializable {
     public static class Builder{
         private String content;
         private String title;
-        private List<String> users = new ArrayList<>();
+        private List<String> users;
         private Boolean atAll = false;
 
         public Builder content(String content) {
