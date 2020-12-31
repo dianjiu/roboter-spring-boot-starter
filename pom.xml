@@ -62,7 +62,6 @@
         </dependency>
     </dependencies>
 
-
     <!-- 开源许可协议 -->
     <licenses>
         <license>
@@ -71,101 +70,131 @@
         </license>
     </licenses>
 
+    <!-- 源码控制信息-->
+    <scm>
+        <connection>scm:git:https://gitee.com/dianjiu/roboter-spring-boot-starter.git</connection>
+        <developerConnection>scm:git:https://gitee.com/dianjiu/roboter-spring-boot-starter.git</developerConnection>
+        <url>https://gitee.com/dianjiu/roboter-spring-boot-starter</url>
+    </scm>
 
     <!--开发者信息 -->
     <developers>
         <developer>
             <name>Dianjiu</name>
             <email>dianjiu@dianjiu.cc</email>
+            <url>https://www.dianjiu.co</url>
         </developer>
     </developers>
-
-
-    <!-- 源码控制信息-->
-    <scm>
-        <connection>scm:git:git://github.com/dianjiu/roboter-spring-boot-starter.git</connection>
-        <developerConnection>scm:git:ssh://github.com/dianjiu/roboter-spring-boot-starter.git</developerConnection>
-        <url>https://github.com/dianjiu/roboter-spring-boot-starter/tree/master</url>
-    </scm>
-
 
     <!--定义snapshots库和releases库的nexus地址-->
     <distributionManagement>
         <snapshotRepository>
-            <!--sonatype-center需要对应到settings.xml下的server的id-->
-            <id>sonatype-center</id>
+            <!--oss需要对应到settings.xml下的server的id-->
+            <id>oss</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+
         <repository>
-            <id>sonatype-center</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>oss</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>
 
     <profiles>
         <profile>
-            <id>release</id>
+            <id>disable-javadoc-doclint</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <jdk>[1.8,)</jdk>
             </activation>
+            <!-- java8版本导致javadoc打包编译失败时候，添加-->
+            <properties>
+                <javadoc.opts>-Xdoclint:none</javadoc.opts>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.3</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>2.3.2</version>
+                        <configuration>
+                            <autoVersionSubmodules>true</autoVersionSubmodules>
+                            <useReleaseProfile>false</useReleaseProfile>
+                            <releaseProfiles>release</releaseProfiles>
+                            <goals>deploy</goals>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.0</version>
+                        <configuration>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.4</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <!-- java8版本导致javadoc打包编译失败时候，添加-->
+                                <configuration>
+                                    <additionalparam>${javadoc.opts}</additionalparam>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
-
-    <build>
-        <plugins>
-            <!--生产javadoc插件-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <aggregate>true</aggregate>
-                    <charset>UTF-8</charset>
-                    <docencoding>UTF-8</docencoding>
-                    <failOnError>false</failOnError>
-                    <defaultAuthor>Dianjiu</defaultAuthor>
-                    <defaultSince>release</defaultSince>
-                    <defaultVersion>1.0.0</defaultVersion>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!--生产源码文件插件-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!--gpg加密插件-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-
-    </build>
-
 </project>
