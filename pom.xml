@@ -197,4 +197,7 @@
             </build>
         </profile>
     </profiles>
+    <!--
+        mvn clean install deploy -P release -Dgpg.passphrase=dianjiu63
+    -->
 </project>
