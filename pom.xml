@@ -7,7 +7,7 @@
     <groupId>cn.org.dianjiu</groupId>
     <artifactId>roboter-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <name>roboter-spring-boot-starter</name>
     <description>Roboter-SpringBoot集成机器人实现消息报警通知</description>
@@ -40,20 +40,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
             <version>${spring-boot.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <version>${spring-boot.version}</version>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>${spring-boot.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
