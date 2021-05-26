@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.org.dianjiu.roboter;
+package cn.org.dianjiu.roboter.support;
 
 
 import cn.org.dianjiu.roboter.common.RoboterRequest;

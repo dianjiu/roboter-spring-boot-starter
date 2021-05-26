@@ -1,79 +1,40 @@
 package cn.org.dianjiu.roboter.config;
 
-
+import cn.org.dianjiu.roboter.common.enums.MessageType;
+import cn.org.dianjiu.roboter.common.enums.RoboterType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "encrypt")
+/**
+ * @author dianjiu
+ */
+@ConfigurationProperties(prefix = "roboter")
 public class RoboterProperties {
-    private static final String DEFAULT_VERSION = "1.0-SNAPSHOT";
-    private static final String DEFAULT_GROUPID = "cn.org.dianjiu";
-    private static final String DEFAULT_ARTIFACTID = "roboter-spring-boot-starter";
+    private static final Boolean DEFAULT_ENABLE = false;
+    private static final RoboterType DEFAULT_ROBOTER_TYPE = RoboterType.DINGTALK;
+    private static final MessageType DEFAULT_MESSAGE_TYPE = MessageType.TEXT;
 
-    private String version = DEFAULT_VERSION;
-    private String groupId = DEFAULT_GROUPID;
-    private String artifactId = DEFAULT_ARTIFACTID;
-    private DingTalkProperties dingtalk;
-    private WeTalkProperties wetalk;
+    private Boolean enable = DEFAULT_ENABLE;
+    private RoboterType roboterType = DEFAULT_ROBOTER_TYPE;
+    private MessageType messageType = DEFAULT_MESSAGE_TYPE;
 
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
-
-    public String getArtifactId() {
-        return artifactId;
-    }
-
-    public void setArtifactId(String artifactId) {
-        this.artifactId = artifactId;
-    }
-
-
+    /**
+     * 钉钉机器人的默认配置
+     */
     public static class DingTalkProperties{
-        private String appId;
 
-        public String getAppId() {
-            return appId;
-        }
-
-        public void setAppId(String appId) {
-            this.appId = appId;
-        }
     }
 
-    public static class WeTalkProperties{
-        private String appId;
-
-        public String getAppId() {
-            return appId;
-        }
-
-        public void setAppId(String appId) {
-            this.appId = appId;
-        }
-    }
-
+    /**
+     * 飞书机器人的默认配置
+     */
     public static class FeiShuProperties{
-        private String appId;
 
-        public String getAppId() {
-            return appId;
-        }
-
-        public void setAppId(String appId) {
-            this.appId = appId;
-        }
     }
 
+    /**
+     * 企业微信机器人的默认配置
+     */
+    public static class WeTalkProperties{
+
+    }
 }

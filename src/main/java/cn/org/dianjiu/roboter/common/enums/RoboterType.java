@@ -1,8 +1,11 @@
 package cn.org.dianjiu.roboter.common.enums;
 
+
 public enum RoboterType {
     DINGTALK("钉钉", "https://oapi.dingtalk.com/robot/send?access_token", true),
+    FEISHU("飞书", "https://oapi.dingtalk.com/robot/send?access_token", true),
     WETALK("企业微信", "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key", true);
+
 
     private String type;
     private String robotUrl;
